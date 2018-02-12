@@ -1,0 +1,51 @@
+/*
+ *
+ */
+
+.brick-container {
+    position: relative;
+    /* hide children of brick container to fix things showing up for a second on page load? */
+
+    &:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+}
+
+.brick-slide {
+    opacity: 0;
+
+    transition: 0.5s linear;
+    top: 0;
+    left: 0;
+    float: left;
+    position: relative;
+
+    &.brick-active {
+        opacity: 1;
+    }
+}
+
+.brick-arrow {
+    position: absolute;
+    top: 50%;
+
+    /* temporary */
+    height: 30px;
+    width: 30px;
+
+    &.prev {
+        left: 5px;
+    }
+
+    &.next {
+        right: 5px;
+    }
+}
+
+
+/* test stuff */
+.my-class {
+    width: 100%;
+}
