@@ -28,6 +28,7 @@ function scripts() {
 }
 
 function watch() {
+    // defaultBuild();
     gulp.watch(paths.styles.src, styles);
     gulp.watch(paths.scripts.src, scripts);
 }

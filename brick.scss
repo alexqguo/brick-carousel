@@ -4,7 +4,7 @@
 
 .brick-container {
     position: relative;
-    /* hide children of brick container to fix things showing up for a second on page load? */
+    overflow-x: hidden; // todo: toggle this off for center mode
 
     &:after {
         content: "";
@@ -13,17 +13,25 @@
     }
 }
 
-.brick-slide {
-    opacity: 0;
+.brick-slider {
+    /*
+    todo: fix. or maybe start it at this and increment if we can tell the actual content is longer
+    do something like: transform: translateX(-400px);
+    */
+    width: 10000px;
+}
 
-    transition: 0.5s linear;
-    top: 0;
-    left: 0;
+.brick-slide {
+    // opacity: 0;
+
+    // transition: 0.5s linear;
+    // top: 0;
+    // left: 0;
     float: left;
-    position: relative;
+    // position: absolute;
 
     &.brick-active {
-        opacity: 1;
+        // opacity: 1;
     }
 }
 
@@ -47,5 +55,5 @@
 
 /* test stuff */
 .my-class {
-    width: 100%;
+    width: 1000px;
 }

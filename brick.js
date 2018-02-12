@@ -70,11 +70,23 @@ CSS classes
         }
 
         init() {
-            // validate, delete self if it's no good
-            this.rootNode.classList.add('brick-container');
-
+            // validate, delete self if it's no good before proceeding
             this.initSlides();
+            this.initContainer();
             this.initArrows();
+        }
+
+        initContainer() {
+            this.rootNode.classList.add('brick-container');
+            let slider = document.createElement('div');
+            slider.classList.add('brick-slider');
+
+            for (var i = 0; i < this.slides.length; i++) {
+                // is this faster with doc fragment? less repaints?
+                slider.appendChild(this.slides[i]);
+            }
+
+            this.rootNode.appendChild(slider);
         }
 
         initSlides() {
