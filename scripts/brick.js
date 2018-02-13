@@ -15,6 +15,8 @@ Functionality
     - ability to init without explicitly saying so. if all the bootstrap data is there (data attributes), and maybe some class to signal, then just initialize
         - initialization NEEDS to be efficient. ideally we can initialize all of them at once
     - items per page
+        - set the slide width to (totalWidth / itemsPerPage) pixels
+        - if 1, center the content in the slides
     - center mode
     - accessibility
     - ajax loading/getting more slides
@@ -113,6 +115,7 @@ CSS classes
 
         initArrows() {
             // TODO: check for existing arrows to use, make this better
+
             var frag = new DocumentFragment();
             var prevArrow = document.createElement('button');
             var nextArrow = document.createElement('button');
@@ -130,7 +133,28 @@ CSS classes
         }
 
         initDots() {
-            // TODO
+            let frag = new DocumentFragment();
+            let dotsContainer = document.createElement('div');
+            dotsContainer.classList.add('brick-dots');
+
+            for (var i = 0; i < this.slides.length; i++) {
+                let dot = document.createElement('button');
+                dot.classList.add('brick-dot');
+                dot.setAttribute('data-slide', i);
+                dotsContainer.appendChild(dot);
+            }
+
+            frag.appendChild(dotsContainer);
+            this.rootNode.appendChild(frag);
+
+            // Doing this so that only one event listener is needed
+            dotsContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('brick-dot') > -1) {
+                    // TODO: validate this
+                    let slideNumber = e.target.getAttribute('data-slide');
+                    this.goToSlide(slideNumber); // this is still okay, arrow func
+                }
+            });
         }
 
         goToSlide(targetIndex) {
