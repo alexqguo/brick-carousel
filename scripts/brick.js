@@ -151,7 +151,7 @@ CSS classes
             dotsContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('brick-dot') > -1) {
                     let slideNumber = e.target.getAttribute('data-slide');
-                    this.goToSlide(slideNumber); // this is still okay, arrow func
+                    this.goToSlide(Number.parseInt(slideNumber)); // 'this' is still okay, arrow func
                 }
             });
         }
