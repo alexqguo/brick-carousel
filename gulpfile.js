@@ -4,11 +4,11 @@ const babel = require('gulp-babel');
 
 const paths = {
   styles: {
-    src: './brick.scss',
+    src: './styles/*.scss',
     dest: './dist/'
   },
   scripts: {
-    src: './brick.js',
+    src: './scripts/brick.js',
     dest: './dist/'
   }
 };

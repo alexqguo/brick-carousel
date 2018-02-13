@@ -1,0 +1,30 @@
+/**
+ * TODO
+ */
+
+@mixin animation($name, $duration) {
+    -webkit-animation: $name $duration;
+    -moz-animation: $name $duration;
+    -o-animation: $name $duration;
+    animation: $name $duration;
+}
+
+@mixin createKeyframe($name) {
+    @-webkit-keyframes #{$name} { @content; }
+    @-moz-keyframes #{$name} { @content; }
+    @keyframes #{$name} { @content; }
+}
+
+@mixin bumpAnimation($name, $direction) {
+    @include createKeyframe($name) {
+        0% {
+            #{$direction}: 0;
+        }
+        50% {
+            #{$direction}: 25px;
+        }
+        100% {
+            #{$direction}: 0;
+        }
+    }
+}

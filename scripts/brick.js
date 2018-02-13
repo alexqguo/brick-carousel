@@ -58,6 +58,8 @@ CSS classes
         */
     };
 
+    const BUMP_DIRECTIONS = ['left', 'right'];
+
     class Brick {
         constructor(id, options) {
             // make an iife?
@@ -133,7 +135,7 @@ CSS classes
         }
 
         goToSlide(targetIndex) {
-            if (!targetIndex || targetIndex === this.currentSlideIndex) return;
+            if (typeof targetIndex === 'undefined' || targetIndex === this.currentSlideIndex) return;
 
             let previousSlideIndex = this.currentSlideIndex;
             this.currentSlideIndex = targetIndex;
@@ -163,14 +165,14 @@ CSS classes
             }
 
             this.xPosition += pixelsToTravel * (goingForwards ? -1 : 1);
-            this.slider.style.transform = createTransformStyle(`translateX(${this.xPosition}px) translateZ(0)`);
+            this.slider.style.transform = `translateX(${this.xPosition}px) translateZ(0)`;
         }
 
         next() {
             if (this.currentSlideIndex < this.slides.length - 1) {
                 this.goToSlide(this.currentSlideIndex + 1);
             } else {
-                // TODO: bump
+                this.performBumpAnimation('right');
                 console.warn('Cannot go to next slide past the last one');
             }
         }
@@ -179,9 +181,17 @@ CSS classes
             if (this.currentSlideIndex > 0) {
                 this.goToSlide(this.currentSlideIndex - 1);
             } else {
-                // TODO: bump
+                this.performBumpAnimation('left');
                 console.warn('Cannot go to previous slide past 0');
             }
+        }
+
+        performBumpAnimation(direction) {
+            if (!direction || BUMP_DIRECTIONS.indexOf(direction) === -1) return;
+            let bumpClass = `bump-${direction}`;
+
+            this.slider.classList.add(bumpClass);
+            setTimeout(() => { this.slider.classList.remove(bumpClass) }, 500)
         }
     }
 
