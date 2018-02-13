@@ -19,6 +19,10 @@
     do something like: transform: translateX(-400px);
     */
     width: 10000px;
+    position: relative;
+
+    transition: 0.5s;
+    transform: translateX(0) translateZ(0); // translateZ for GPU acceleration
 }
 
 .brick-slide {

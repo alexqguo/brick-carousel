@@ -65,6 +65,10 @@ CSS classes
             this.rootNode = document.getElementById(id);
             this.currentSlideIndex = 0;
             this.options = options; // have defaults and join them, figure that out later
+            this.slides = null;
+            this.currentSlide = null;
+            this.slider = null;
+            this.xPosition = 0; // Using this?
 
             this.init();
         }
@@ -87,6 +91,7 @@ CSS classes
             }
 
             this.rootNode.appendChild(slider);
+            this.slider = slider;
         }
 
         initSlides() {
@@ -122,13 +127,53 @@ CSS classes
             this.rootNode.append(frag);
         }
 
-        goToSlide(index) {
-            this.currentSlideIndex = index;
+        goToSlide(targetIndex) {
+            if (targetIndex === this.currentSlideIndex) return;
 
-            // TODO: improve browser compatibility
+            let previousSlideIndex = this.currentSlideIndex;
+            this.currentSlideIndex = targetIndex;
+
+            // TODO: improve browser compatibility, maybe remove this if it's not used?
             this.currentSlide.classList.remove('brick-active');
             this.currentSlide = this.slides[this.currentSlideIndex];
             this.currentSlide.classList.add('brick-active');
+
+            let pixelsToTravel = 0;
+            let initialIndex = null;
+            let endIndex = null;
+            let goingForwards = previousSlideIndex < this.currentSlideIndex;
+
+            if (goingForwards) {
+                // Going forwards. Need to count up to but not including the target slide. Include current
+                initialIndex = previousSlideIndex;
+                endIndex = targetIndex - 1;
+            } else {
+                // Going backwards. Need to count back to and including the target slide. Don't include current
+                initialIndex = targetIndex;
+                endIndex = previousSlideIndex - 1;
+            }
+
+            // console.log('current x: ' + this.xPosition);
+
+            for (let i = initialIndex; i <= endIndex; i++) {
+                pixelsToTravel += this.slides[i].clientWidth;
+                // console.log('client width: ' + this.slides[i].clientWidth);
+            }
+
+            // console.log('pixels to travel: ' + pixelsToTravel);
+
+            if (goingForwards) pixelsToTravel *= -1;
+            this.xPosition += pixelsToTravel;
+
+            this.slider.style.transform = createTransformStyle(this.xPosition);
+            /*
+            need to get the number of slides we're moving, calculate each of their
+            widths, then transform the slider by that much
+             */
+
+            function createTransformStyle(xPixelValue) {
+                return `translateX(${xPixelValue}px) translateZ(0)`;
+            }
         }
 
         next() {
