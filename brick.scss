@@ -21,7 +21,7 @@
     width: 10000px;
     position: relative;
 
-    transition: 0.5s;
+    transition: 0.5s; // TODO: set as sass variable if this ends up being reused
     transform: translateX(0) translateZ(0); // translateZ for GPU acceleration
 }
 
@@ -54,10 +54,4 @@
     &.next {
         right: 5px;
     }
-}
-
-
-/* test stuff */
-.my-class {
-    width: 1000px;
 }
