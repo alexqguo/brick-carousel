@@ -156,13 +156,18 @@ CSS classes
             });
         }
 
+        /*
+            TODO
+            - improve browser compatibility? classList
+            - remove brick-active if it isn't being used
+            - need to vastly improve validation. if a string comes in, everything dies
+        */
         goToSlide(targetIndex) {
             if (typeof targetIndex === 'undefined' || targetIndex === this.currentSlideIndex) return;
 
             let previousSlideIndex = this.currentSlideIndex;
             this.currentSlideIndex = targetIndex;
 
-            // TODO: improve browser compatibility, maybe remove this if it's not used?
             this.currentSlide.classList.remove('brick-active');
             this.currentSlide = this.slides[this.currentSlideIndex];
             this.currentSlide.classList.add('brick-active');
