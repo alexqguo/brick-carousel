@@ -147,10 +147,9 @@ CSS classes
             frag.appendChild(dotsContainer);
             this.rootNode.appendChild(frag);
 
-            // Doing this so that only one event listener is needed
+            // Doing this so that only one event listener is needed per carousel
             dotsContainer.addEventListener('click', (e) => {
                 if (e.target.classList.contains('brick-dot') > -1) {
-                    // TODO: validate this
                     let slideNumber = e.target.getAttribute('data-slide');
                     this.goToSlide(slideNumber); // this is still okay, arrow func
                 }
