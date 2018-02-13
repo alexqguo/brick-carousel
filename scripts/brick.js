@@ -28,7 +28,6 @@ Functionality
     - custom events
 
 Other random stuff/utilities
-    - Get slot code
     - Optimizations
     - Remove carousel ID
     - Default items per page to 1
@@ -58,7 +57,7 @@ CSS classes
         */
     };
 
-    const BUMP_DIRECTIONS = ['left', 'right'];
+    const BUMP_DIRECTIONS = ['left', 'right']; // this is kind of pointless
 
     class Brick {
         constructor(id, options) {

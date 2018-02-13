@@ -1,11 +1,7 @@
-/*
- * TODO
- */
+// Main styles for the carousel
 
+@import "vars";
 @import "mixins";
-
-/* Vars */
-$animationDuration: 0.5s;
 
 .brick-container {
     position: relative;
@@ -21,7 +17,7 @@ $animationDuration: 0.5s;
 .brick-slider {
     /*
     todo: fix. or maybe start it at this and increment if we can tell the actual content is longer
-    do something like: transform: translateX(-400px);
+    or just keep this as an initial value and change it once brick initializes
     */
     width: 10000px;
     position: relative;

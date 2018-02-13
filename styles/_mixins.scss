@@ -1,6 +1,4 @@
-/**
- * TODO
- */
+// Mixins that are shared throughout the brick styles
 
 @mixin animation($name, $duration) {
     -webkit-animation: $name $duration;
