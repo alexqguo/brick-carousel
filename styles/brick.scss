@@ -16,24 +16,19 @@
 
 .brick-slider {
     /*
-    todo: fix. or maybe start it at this and increment if we can tell the actual content is longer
+    TODO: fix. or maybe start it at this and increment if we can tell the actual content is longer
     or just keep this as an initial value and change it once brick initializes
     */
     width: 10000px;
     position: relative;
 
-    transition: $animationDuration; // TODO: set as sass variable if this ends up being reused
+    transition: $animationDuration;
     transform: translateX(0) translateZ(0); // translateZ for GPU acceleration
 }
 
 .brick-slide {
-    // opacity: 0;
-
-    // transition: 0.5s linear;
-    // top: 0;
-    // left: 0;
     float: left;
-    // position: absolute;
+    // padding-left: 20px;
 
     &.brick-active {
         // opacity: 1;

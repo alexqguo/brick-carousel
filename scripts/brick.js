@@ -1,65 +1,73 @@
 /*
-Structure
-    - Carousel
-        - init(id, attributes)
-        - goToSlide
-        - next
-        - prev
-        - addSlide
-        - removeSlide
-    - Slide
-    - Dots
-    - Shoveler
-
+--------------------------------
 Functionality
-    - ability to init without explicitly saying so. if all the bootstrap data is there (data attributes), and maybe some class to signal, then just initialize
-        - initialization NEEDS to be efficient. ideally we can initialize all of them at once
-    - items per page
-        - set the slide width to (totalWidth / itemsPerPage) pixels
-        - if 1, center the content in the slides
-    - center mode
-    - accessibility
-    - ajax loading/getting more slides
-        - future ajax slides can hold reference to args and an endpoint and slick can handle the call, if there is an assumption that the call will return one slide worth of items
-    - autoplay + autoplay interval
-    - clear autoplay when a click happens
-    - dots/arrows on/off
-    - looping
-    - add/remove slide
-    - swiping
-    - custom events
+--------------------------------
+- ability to init without explicitly saying so. if all the bootstrap data is there (data attributes), and maybe some class to signal, then just initialize
+    - initialization NEEDS to be efficient. ideally we can initialize all of them at once
+- items per page
+    - set the slide width to (totalWidth / itemsPerPage) pixels
+    - if 1, center the content in the slides
+- center mode
+- accessibility
+- ajax loading/getting more slides
+    - future ajax slides can hold reference to args and an endpoint and slick can handle the call, if there is an assumption that the call will return one slide worth of items
+- autoplay + autoplay interval
+- clear autoplay when a click happens
+- dots/arrows on/off
+- looping
+- add/remove slide
+- swiping
+- custom events
 
+--------------------------------
 Other random stuff/utilities
-    - Optimizations
-    - Remove carousel ID
-    - Default items per page to 1
-    - Clean up the bootstrapping
+--------------------------------
+- Optimizations
+- Remove carousel ID
+- Default items per page to 1
+- Clean up the bootstrapping
 
+--------------------------------
 Usage
-    var carousel = new Brick()
+--------------------------------
+    - var carousel = new Brick()
 
+--------------------------------
 HTML Structure
+--------------------------------
     #brick-container (init with this)
-        slide
-        slide
-        slide
+        brick-slider
+            brick-slide
+            brick-slide
+            brick-slide
+        brick-dots
+        brick-arrow prev
+        brick arrow next
 
-CSS classes
-    brick-slide for items
-    brick-active for active slide
-    brick-container for container
+--------------------------------
+Main todo
+--------------------------------
+- implement itemsPerSlide
+    - when one, set width to 100%
+    - when more than one, need to have a brick-first and brick-last to stick the first and last elements to the edge
+        - can't just set everything to x% width
+        - use bc grid for inspiration
+- implement centerMode
+    - to get this fully working, will need support for infinite looping if we want to be able to see preview of the next/prev slides
+    -
  */
 (function() {
     'use strict';
 
     const BRICK_DEFAULTS = {
+        itemsPerSlide: 1, // How many slides are visible at any given time
+        centerMode: true, // Whether or not the active slide is centered
+        infinite: false, // Whether or not the carousel is infinite
+
         /*
-        prevArrow: '<button class="brick-arrow prev">Previous</button>',
-        nextArrow: '<button class="brick-arrow next">Next</button>'
+
         */
     };
-
-    const BUMP_DIRECTIONS = ['left', 'right']; // this is kind of pointless
 
     class Brick {
         constructor(id, options) {
@@ -67,11 +75,12 @@ CSS classes
             this.rootId = id;
             this.rootNode = document.getElementById(id);
             this.currentSlideIndex = 0;
-            this.options = options; // have defaults and join them, figure that out later
             this.slides = null;
             this.currentSlide = null;
             this.slider = null;
-            this.xPosition = 0; // Using this?
+            this.xPosition = 0;
+            this.options = Object.assign(options, BRICK_DEFAULTS); // These are properties which come from the user
+            // TODO: this will overwrite properties in options which we don't want, and also doesn't have good browser support
 
             this.init();
         }
@@ -115,6 +124,7 @@ CSS classes
 
         initArrows() {
             // TODO: check for existing arrows to use, make this better
+            // If arrows already exist, don't do any of this, just add event listeners
 
             var frag = new DocumentFragment();
             var prevArrow = document.createElement('button');
@@ -214,7 +224,7 @@ CSS classes
         }
 
         performBumpAnimation(direction) {
-            if (!direction || BUMP_DIRECTIONS.indexOf(direction) === -1) return;
+            if (!direction || ['left', 'right'].indexOf(direction) === -1) return;
             let bumpClass = `bump-${direction}`;
 
             this.slider.classList.add(bumpClass);
