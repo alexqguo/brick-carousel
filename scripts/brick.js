@@ -53,7 +53,7 @@ Main todo
 (function() {
     'use strict';
 
-    if (window.Brick) return;
+    if (window.Brick || typeof window.Brick !== 'undefined') return;
 
     const BRICK_DEFAULTS = {
         itemsPerSlide: 1, // How many slides are visible at any given time
