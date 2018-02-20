@@ -79,7 +79,7 @@ Main todo
             // TODO: this will overwrite properties in options which we don't want, and also doesn't have good browser support
 
             // THIS IS DEBUGING AND SHOULD NOT BE PUSHED
-            this.options.itemsPerSlide = 2;
+            // this.options.itemsPerSlide = 2;
 
             this.init();
         }
@@ -93,25 +93,27 @@ Main todo
         }
 
         initContainer() {
-            this.rootNode.classList.add('brick-container');
+            let frag = document.createDocumentFragment();
             let slider = document.createElement('div');
             slider.classList.add('brick-slider');
+            this.rootNode.classList.add('brick-container');
 
-            for (var i = 0; i < this.slides.length; i++) {
-                // is this faster with doc fragment? less repaints?
-                slider.appendChild(this.slides[i]);
+            for (let i = 0; i < this.slides.length; i++) {
+                frag.appendChild(this.slides[i]);
             }
 
+            slider.append(frag);
             this.rootNode.appendChild(slider);
             this.slider = slider;
         }
 
         initSlides() {
-            var slides = [];
+            let slides = [];
 
-            for (var i = 0; i < this.rootNode.children.length; i++) {
-                var slide = this.rootNode.children[i];
+            for (let i = 0; i < this.rootNode.children.length; i++) {
+                let slide = this.rootNode.children[i];
                 slide.classList.add('brick-slide');
+                // apparently just reading offsetWidth can cause a reflow https://www.sitepoint.com/10-ways-minimize-reflows-improve-performance/
                 slide.style.width = `${this.rootNode.offsetWidth / this.options.itemsPerSlide}px`;
                 slides.push(slide);
             }
@@ -126,9 +128,9 @@ Main todo
             // TODO: check for existing arrows to use, make this better
             // If arrows already exist, don't do any of this, just add event listeners
 
-            var frag = new DocumentFragment();
-            var prevArrow = document.createElement('button');
-            var nextArrow = document.createElement('button');
+            let frag = document.createDocumentFragment();
+            let prevArrow = document.createElement('button');
+            let nextArrow = document.createElement('button');
             prevArrow.classList.add('brick-arrow');
             nextArrow.classList.add('brick-arrow');
             prevArrow.classList.add('prev');
