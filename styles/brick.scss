@@ -20,6 +20,8 @@
     or just keep this as an initial value and change it once brick initializes
     */
     width: 10000px;
+
+    overflow-y: hidden;
     position: relative;
 
     transition: $animationDuration;
@@ -28,6 +30,8 @@
 
 .brick-slide {
     float: left;
+    box-sizing: border-box;
+
     // padding-left: 20px;
 
     &.brick-active {

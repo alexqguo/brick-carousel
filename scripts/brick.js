@@ -47,14 +47,8 @@ HTML Structure
 --------------------------------
 Main todo
 --------------------------------
-- implement itemsPerSlide
-    - when one, set width to 100%
-    - when more than one, need to have a brick-first and brick-last to stick the first and last elements to the edge
-        - can't just set everything to x% width
-        - use bc grid for inspiration
 - implement centerMode
     - to get this fully working, will need support for infinite looping if we want to be able to see preview of the next/prev slides
-    -
  */
 (function() {
     'use strict';
@@ -81,6 +75,9 @@ Main todo
             this.xPosition = 0;
             this.options = Object.assign(options, BRICK_DEFAULTS); // These are properties which come from the user
             // TODO: this will overwrite properties in options which we don't want, and also doesn't have good browser support
+
+            // THIS IS DEBUGING AND SHOULD NOT BE PUSHED
+            // this.options.itemsPerSlide = 2;
 
             this.init();
         }
@@ -113,6 +110,7 @@ Main todo
             for (var i = 0; i < this.rootNode.children.length; i++) {
                 var slide = this.rootNode.children[i];
                 slide.classList.add('brick-slide');
+                slide.style.width = `${this.rootNode.offsetWidth / this.options.itemsPerSlide}px`;
                 slides.push(slide);
             }
 
@@ -146,8 +144,10 @@ Main todo
             let frag = new DocumentFragment();
             let dotsContainer = document.createElement('div');
             dotsContainer.classList.add('brick-dots');
+            // We only want as many dots that would make sense given how many we show on each slide
+            let numDots = this.slides.length - this.options.itemsPerSlide + 1;
 
-            for (var i = 0; i < this.slides.length; i++) {
+            for (var i = 0; i < numDots; i++) {
                 let dot = document.createElement('button');
                 dot.classList.add('brick-dot');
                 dot.setAttribute('data-slide', i);
@@ -174,6 +174,10 @@ Main todo
         */
         goToSlide(targetIndex) {
             if (typeof targetIndex === 'undefined' || targetIndex === this.currentSlideIndex) return;
+
+            // Restrict targetIndex in case we want to go to the last item, but we're showing multiple per page
+            // In this case we want the target index (think of it as the anchor) to actually be earler than the one requested
+            targetIndex = Math.min(targetIndex, this.slides.length - this.options.itemsPerSlide);
 
             let previousSlideIndex = this.currentSlideIndex;
             this.currentSlideIndex = targetIndex;
@@ -206,7 +210,7 @@ Main todo
         }
 
         next() {
-            if (this.currentSlideIndex < this.slides.length - 1) {
+            if (this.currentSlideIndex < this.slides.length - this.options.itemsPerSlide) {
                 this.goToSlide(this.currentSlideIndex + 1);
             } else {
                 this.performBumpAnimation('right');
