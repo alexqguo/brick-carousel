@@ -53,6 +53,8 @@ Main todo
 (function() {
     'use strict';
 
+    if (window.Brick) return;
+
     const BRICK_DEFAULTS = {
         itemsPerSlide: 1, // How many slides are visible at any given time
         centerMode: true, // Whether or not the active slide is centered
@@ -77,7 +79,7 @@ Main todo
             // TODO: this will overwrite properties in options which we don't want, and also doesn't have good browser support
 
             // THIS IS DEBUGING AND SHOULD NOT BE PUSHED
-            // this.options.itemsPerSlide = 2;
+            this.options.itemsPerSlide = 2;
 
             this.init();
         }
@@ -236,7 +238,5 @@ Main todo
         }
     }
 
-    window.Brick = Brick; // make this better
-
-    window.b = Brick; //remove
+    window.Brick = Brick;
 })();
