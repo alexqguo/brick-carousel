@@ -1,55 +1,61 @@
 /*
 --------------------------------
-Functionality
---------------------------------
-- ability to init without explicitly saying so. if all the bootstrap data is there (data attributes), and maybe some class to signal, then just initialize
-    - initialization NEEDS to be efficient. ideally we can initialize all of them at once
-- items per page
-    - set the slide width to (totalWidth / itemsPerPage) pixels
-    - if 1, center the content in the slides
-- center mode
-- accessibility
-- ajax loading/getting more slides
-    - future ajax slides can hold reference to args and an endpoint and slick can handle the call, if there is an assumption that the call will return one slide worth of items
-- autoplay + autoplay interval
-- clear autoplay when a click happens
-- dots/arrows on/off
-- looping
-- add/remove slide
-- swiping
-- custom events
-
---------------------------------
-Other random stuff/utilities
---------------------------------
-- Optimizations
-- Remove carousel ID
-- Default items per page to 1
-- Clean up the bootstrapping
-
---------------------------------
 Usage
 --------------------------------
-    - var carousel = new Brick()
+- var carousel = new Brick()
+- bootstrapping the data
+
+--------------------------------
+Concepts
+--------------------------------
+- slide
+    - a slide in a brick carousel represents all of the items that are visible in the carousel at once
+- item
+    - an item in a brick carousel is an individual element which you want to display in the carousel
 
 --------------------------------
 HTML Structure
 --------------------------------
-    #brick-container (init with this)
-        brick-slider
-            brick-slide
-            brick-slide
-            brick-slide
-        brick-dots
-        brick-arrow prev
-        brick arrow next
+#brick-container (init with this)
+    brick-slider
+        brick-slide
+        brick-slide
+        brick-slide
+    brick-dots
+    brick-arrow prev
+    brick arrow next
+
+--------------------------------
+Potential optimizations
+--------------------------------
+- Instead of each init function doing its own doc fragment and then adding them individually, could potentially create one
+master fragment in the init, each sub init function can add to that, and then at the end of everything append the fragment
+- Look into a way to be able to init all carousels at once without having to do them sequentially
 
 --------------------------------
 Main todo
 --------------------------------
 - implement centerMode
     - to get this fully working, will need support for infinite looping if we want to be able to see preview of the next/prev slides
+- implement infinite
+- implement items per scroll
+- style dots and arrows
+- bootstrapping the data
+    - maybe have a master data-brick-bootstrap="true" to trigger it
+- autoplay
+    - disables when there's a manual user action of any kind
+- swiping for mobile
+- accessibility
+
+--------------------------------
+Other POTENTIAL features
+--------------------------------
+- custom events
+- ajax loading, adding/removing slides dynamically
+    - future ajax slides can hold reference to args and an endpoint and slick can handle the call, if there is an assumption that the call will return one slide worth of items
+
  */
+
 (function() {
     'use strict';
 
@@ -59,6 +65,7 @@ Main todo
         itemsPerSlide: 1, // How many slides are visible at any given time
         centerMode: true, // Whether or not the active slide is centered
         infinite: false, // Whether or not the carousel is infinite
+        dots: true, // Whether or not the dots should exist
 
         /*
 
@@ -79,7 +86,7 @@ Main todo
             // TODO: this will overwrite properties in options which we don't want, and also doesn't have good browser support
 
             // THIS IS DEBUGING AND SHOULD NOT BE PUSHED
-            // this.options.itemsPerSlide = 2;
+            this.options.itemsPerSlide = 2;
 
             this.init();
         }
@@ -99,11 +106,11 @@ Main todo
             this.rootNode.classList.add('brick-container');
 
             for (let i = 0; i < this.slides.length; i++) {
-                frag.appendChild(this.slides[i]);
+                slider.appendChild(this.slides[i]);
             }
 
-            slider.append(frag);
-            this.rootNode.appendChild(slider);
+            frag.appendChild(slider);
+            this.rootNode.appendChild(frag);
             this.slider = slider;
         }
 
@@ -127,6 +134,7 @@ Main todo
         initArrows() {
             // TODO: check for existing arrows to use, make this better
             // If arrows already exist, don't do any of this, just add event listeners
+            // Also check for if the dots option is enabled
 
             let frag = document.createDocumentFragment();
             let prevArrow = document.createElement('button');
@@ -145,7 +153,7 @@ Main todo
         }
 
         initDots() {
-            let frag = new DocumentFragment();
+            let frag = document.createDocumentFragment();
             let dotsContainer = document.createElement('div');
             dotsContainer.classList.add('brick-dots');
             // We only want as many dots that would make sense given how many we show on each slide
@@ -172,7 +180,7 @@ Main todo
 
         /*
             TODO
-            - improve browser compatibility? classList
+            - improve browser compatibility? classList is IE10+
             - remove brick-active if it isn't being used
             - need to vastly improve validation. if a string comes in, everything dies
         */
@@ -236,7 +244,7 @@ Main todo
             let bumpClass = `bump-${direction}`;
 
             this.slider.classList.add(bumpClass);
-            setTimeout(() => { this.slider.classList.remove(bumpClass) }, 500)
+            setTimeout(() => { this.slider.classList.remove(bumpClass) }, 500) // this is poopy
         }
     }
 
